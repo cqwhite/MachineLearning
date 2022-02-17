@@ -1,0 +1,38 @@
+Connor White
+
+Question 1:
+    testData.txt
+        100000,500
+        200000,1000
+        500000,2000
+        150000,800
+        300000,1700
+
+Question 2: 
+    #code used to extract price and sqrfoot in the csv file
+    def readAndSetUpTrainingValuesCSV(fileName):
+        inFile = open(fileName, "r")
+        xList = []
+        yList = []
+        m = 0
+        for line in inFile:
+            if (m != 0):
+                items = line.split(",")
+                xList.append(float(items[1]))
+                yList.append(float(items[4]))
+            m += 1
+        m = m - 1
+        return xList, yList, m
+
+Question 3:
+    I am assuming ULR will work decently well for predicting housing prices based on square footage. This is because it is most likely somewhat linear, so a single paramater ULR hopefully will fit the data mostly correctly.
+
+Question 4:
+   Iters=      0 prevJCost=-0.0000000000 currentJCost=-0.0000000000 diff=0.0000000000
+   
+   Theta0= 0.00000000000000000   Theta1= 0.00000000000000000
+
+   For alpha 0.000000000001 with 1 iterations and threshold 0.00000000001 took 0.0000911 seconds
+
+Question 5:
+    To increase the performance of the prediction would most likely be by adding more paramters to make the regression polynomial, meaning the best fit line could bend with the graph more.

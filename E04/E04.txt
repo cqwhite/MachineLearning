@@ -1,0 +1,57 @@
+Connor White
+
+0. 
+    The thetas are 0 if our test data is 1,1 2,2 3,3 4,4 etc even for increasing degrees.
+
+    The resulst are
+
+    Predicted test score for 20 hours studied: 19.999999999999996
+    Goodness of fit (r2 score): 1.0
+
+
+1.
+    The goodness of fit increases as you increase your degrees. This means that the higher the degree the more accurate our model is for our data sample.
+    This does not mean that our model will be great for all population though due to our small sample size.
+
+Degree 1 results:
+    Theta1 and Theta0 [ 2.01467487 -3.9057602 ]
+    Predicted test score for 20 hours studied: 36.38773723347843
+    Goodness of fit (r2 score): 0.8777480188408424
+
+Degree 2 results:
+    Thetas . . . [-0.01058553  2.58803242 -9.52024218]
+    Predicted test score for 20 hours studied: 38.00619409123072
+    Goodness of fit (r2 score): 0.8817956886030568
+
+Degree 3 results:
+    Thetas . . . [ 8.52013763e-04 -7.98813379e-02  4.15135956e+00 -1.78621296e+01]
+    Predicted test score for 20 hours studied: 40.02863655926521
+    Goodness of fit (r2 score): 0.8867312025237684
+
+Degree 4 results:
+    Thetas . . . [ 1.14947762e-04 -1.11893755e-02  3.28381081e-01 -7.42548269e-01 -2.97572062e+00]
+    Predicted test score for 20 hours studied: 42.402384403856445
+    Goodness of fit (r2 score): 0.9030912305839351
+
+
+
+2. 
+    The best fit slowly increases depending on the degrees, so for our client we would want a regression model with a high degree.
+    Next steps with only these two features would be fine tuning the degrees to be the most accurate and worth it with performance. We would want to test it with more sample sizes or even see if there is a better model for our problem.
+
+
+Degree 2 Results:
+    Thetas . . . [ 3.70309274e-02 -2.92624640e+01  2.89428054e+05]
+    Goodness of fit (r2 score): 0.8238032384900786
+
+Degree 3 Results:
+    Thetas . . . [ 1.60625300e-05 -7.80766312e-02  2.21824187e+02  1.25859062e+05]
+    Goodness of fit (r2 score): 0.8308733966540526
+
+Degree 4 Results:
+    Thetas . . . [ 2.37472858e-08 -2.10291417e-04  6.76172691e-01 -8.11551159e+02 6.14040636e+05]
+    Goodness of fit (r2 score): 0.8420947226784697
+
+Degree 5 Results:
+    Thetas . . . [ 2.78684102e-12 -9.31938603e-09 -6.18145503e-05  3.62854966e-01 -5.02907568e+02  5.00960790e+05]
+    Goodness of fit (r2 score): 0.8422143595443214
