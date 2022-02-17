@@ -40,6 +40,24 @@ def normalEquation(XsTitles, housingDF):
           str(prediction)+"%")
     return prediction
 
+# find the best fit for features
+
+
+def findBestFeatures(housingDF, columnNames):
+    equationFlag = True
+    count = 0
+    while(equationFlag):
+        XsTitles = []
+        for i in range(6):
+            randomIndex = random.randint(0, len(columnNames)-1)
+            XsTitles.append(columnNames[randomIndex])
+        x = normalEquation(XsTitles, housingDF)
+        count = count + 1
+        if(x < 30.9):
+            equationFlag = True
+            break
+    print("Iterations: " + str(count))
+
 
 # Read data from file using pandas and create a dataframe
 housingDF = pd.read_csv('E06/housing.csv')
@@ -47,21 +65,10 @@ northBendHousingDF = housingDF[housingDF['city'] == 'North Bend']
 columnNames = ["bedrooms", "bathrooms", "sqft_living", "sqft_lot", "floors",
                "waterfront", "view", "condition", "sqft_above", "sqft_basement", "yr_built", "yr_renovated"]
 
+#findBestFeatures(housingDF, columnNames)
 
 # Subdivide the data into features (Xs) and dependent variable (y) dataframes
-#XsTitles = ['sqft_living', 'bedrooms', 'bathrooms', 'yr_built', 'waterfront']
+XsTitles = ['view', 'floors', 'bathrooms',
+            'sqft_living', 'bedrooms', 'yr_built']
 
-#find the best fit for features
-equationFlag = True
-count = 0
-while(equationFlag):
-    XsTitles = []
-    for i in range(6):
-        randomIndex = random.randint(0, len(columnNames)-1)
-        XsTitles.append(columnNames[randomIndex])
-    x = normalEquation(XsTitles, housingDF)
-    count = count + 1
-    if(x < 30.9):
-        equationFlag = True
-        break
-print("Iterations: " + str(count))
+normalEquation(XsTitles, housingDF)
