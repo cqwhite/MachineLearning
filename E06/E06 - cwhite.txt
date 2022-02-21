@@ -1,0 +1,39 @@
+﻿Connor White, David Chalifoux
+
+
+0.
+* With no change to the data, the first response is:
+                average price difference for training values: 10.2%
+
+
+* After adding bathrooms and:
+                average price difference for training values: 10.2%
+        
+* This is interesting because it does not help the performance, it actually stays the exact same. This is probably due to the fact that square feet are correlated with bathrooms and bedrooms, which makes sense because the more bedrooms and bathrooms you have the larger the square feet are.
+
+
+1.
+* After removing the North Bend restriction our training changes to:
+Thetas: [123030.52945765    274.4498102  -55123.73565188  13571.05877552]
+average price difference for training values: 33.1%
+2.
+* Features: ['sqft_living', 'bedrooms', 'bathrooms']
+   * Result: average price difference for training values: 33.1%
+* Features: ['sqft_living', 'bedrooms', 'bathrooms', ‘sqrft_lot’]
+   * Result: average price difference for training values: 33.0%
+* Features: ['sqft_living', 'bedrooms', 'bathrooms', 'sqft_lot', 'yr_built]
+   * Result: average price difference for training values: 31.5%
+* Features: ['sqft_living', 'bedrooms', 'bathrooms', 'yr_built', 'waterfront']
+   * Result: average price difference for training values: 31.4%
+* Features: ['sqft_living', 'bedrooms', ‘bathrooms', 'sqft_lot', 'yr_built', 'waterfront’]
+   * Result: average price difference for training values: 31.3%
+* Features: ['view', 'floors', 'bathrooms', 'sqft_living', 'bedrooms', 'yr_built']
+   * Result: average price difference for training values: 30.8%
+
+
+
+
+* According to the features that I chose on my last test it seems like they have the best “predicted training percentage” with 6 features of view, floors, bathrooms, sqft_living, bedrooms, and year built.
+
+
+3.
