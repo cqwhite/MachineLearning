@@ -1,5 +1,6 @@
 # Starter Code for multivariate regression with train and test
 # Art White, February, 2022
+# Connor White & David Chalifoux
 import numpy as np
 import pandas as pd
 
