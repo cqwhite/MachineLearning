@@ -60,7 +60,7 @@ def findBestFeatures(housingDF, columnNames):
 
 
 # Read data from file using pandas and create a dataframe
-housingDF = pd.read_csv('E06/housing.csv')
+housingDF = pd.read_csv('housing.csv')
 northBendHousingDF = housingDF[housingDF['city'] == 'North Bend']
 columnNames = ["bedrooms", "bathrooms", "sqft_living", "sqft_lot", "floors",
                "waterfront", "view", "condition", "sqft_above", "sqft_basement", "yr_built", "yr_renovated"]
