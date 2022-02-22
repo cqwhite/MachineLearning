@@ -1,6 +1,8 @@
 # Starter Code for multivariate regression with train and test
 # Art White, February, 2022
 # Connor White, David Chalifoux
+
+##############THIS FILE FINDS THE OPTIMNAL FEATURES##################
 import numpy as np
 import pandas as pd
 import random
