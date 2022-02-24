@@ -52,12 +52,18 @@ def gradientDescent(xList,yList,m,maxIters,alpha):
 
 def testResults(thetaList,xList,yList):
     errorCount=0
-    #Your code here both showing individual tests and calculating apparent error rate
+    for i,x in enumerate(xList):
+        hypothesis = round(hOfX(x,thetaList))
+    
+        y = yList[i]
+        if(hypothesis != y):
+            errorCount = errorCount + 1
+
     print("Errors",errorCount/150)
         
 def main():
-    xList, yList, m = readInData('normScaledFishersIris.txt')
-    thetaList = gradientDescent(xList,yList,m,10000,.0001)
+    xList, yList, m = readInData('E07/normScaledFishersIris.txt')
+    thetaList = gradientDescent(xList,yList,m,10000,.001)
     print("Predictive model: ", thetaList[0], "+", thetaList[1], "*(x1)", "+", thetaList[2], "*(x2)", "+", thetaList[3], "*(x3)", "+", thetaList[4], "*(x4)")
     testResults(thetaList,xList,yList)
 
