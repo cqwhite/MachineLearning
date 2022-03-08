@@ -1,3 +1,4 @@
+#Connor White & David Chalifoux
 import math
 import random
 import sys
@@ -71,7 +72,7 @@ def testResults(thetaList, xList, yList):
 
 
 def main():
-    xList, yList, m = readInData('normScaledFishersIris.txt')
+    xList, yList, m = readInData('E07/normScaledFishersIris.txt')
     thetaList = gradientDescent(xList, yList, m, 10000, .1)
     print("Predictive model: ", thetaList[0], "+", thetaList[1], "*(x1)", "+",
           thetaList[2], "*(x2)", "+", thetaList[3], "*(x3)", "+", thetaList[4], "*(x4)")
