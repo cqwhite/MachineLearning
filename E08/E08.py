@@ -77,14 +77,17 @@ def calcErr():
     temp = h1Node["feedForward"] * (1 - h1Node["feedForward"]) * (
         (o1Node["error"] * h1Node["weight_o1"]) + (o2Node["error"] * h1Node["weight_o2"]))
     h1Node["error"] = round(temp, 3)
-    print(h1Node["error"])
 
     # Calc err of h2
     temp = h2Node["feedForward"] * (1 - h2Node["feedForward"]) * (
         (o1Node["error"] * h2Node["weight_o1"]) + (o2Node["error"] * h2Node["weight_o2"]))
     h2Node["error"] = round(temp, 3)
-    print(h2Node["error"])
+
+
+def backPropagation():
+    return  # TODO
 
 
 feedForward()
 calcErr()
+backPropagation()
