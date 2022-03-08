@@ -48,18 +48,18 @@ o2Node = {
 def feedForward():
     # Calc h1
     temp = i1Node["weight_h1"] + i2Node["weight_h1"] + h1Node["value"]
-    h1Node["feedFoward"] = round(1 / (1+exp(temp * -1)), 2)
+    h1Node["feedForward"] = round(1 / (1+exp(temp * -1)), 2)
 
     # Calc h2
     temp = i1Node["weight_h2"] + i2Node["weight_h2"] + h2Node["value"]
     h2Node["feedForward"] = round(1 / (1+exp(temp * -1)), 2)
 
     # Calc o1
-    temp = (h1Node["weight_o1"] * h1Node["feedFoward"]) + \
+    temp = (h1Node["weight_o1"] * h1Node["feedForward"]) + \
         (h2Node["weight_o1"] * h2Node["feedForward"]) + o1Node["value"]
     o1Node["feedForward"] = round(1 / (1+exp(temp * -1)), 2)
     # Calc o2
-    temp = (h1Node["weight_o2"] * h1Node["feedFoward"]) + \
+    temp = (h1Node["weight_o2"] * h1Node["feedForward"]) + \
         (h2Node["weight_o2"] * h2Node["feedForward"]) + o2Node["value"]
     o2Node["feedForward"] = round(1 / (1+exp(temp * -1)), 2)
 
@@ -74,7 +74,16 @@ def calcErr():
         (1-o2Node["feedForward"])*(o2Node["true"]-o2Node["feedForward"])
     o2Node["error"] = round(temp, 2)
     # Calc err of h1
+    temp = h1Node["feedForward"] * (1 - h1Node["feedForward"]) * (
+        (o1Node["error"] * h1Node["weight_o1"]) + (o2Node["error"] * h1Node["weight_o2"]))
+    h1Node["error"] = round(temp, 3)
+    print(h1Node["error"])
+
     # Calc err of h2
+    temp = h2Node["feedForward"] * (1 - h2Node["feedForward"]) * (
+        (o1Node["error"] * h2Node["weight_o1"]) + (o2Node["error"] * h2Node["weight_o2"]))
+    h2Node["error"] = round(temp, 3)
+    print(h2Node["error"])
 
 
 feedForward()
