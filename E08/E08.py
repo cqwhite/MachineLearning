@@ -85,7 +85,28 @@ def calcErr():
 
 
 def backPropagation():
-    return  # TODO
+    # calc weight and Bias Adjustment of o1
+    tempNode = o1Node["value"] + o1Node["error"]
+    print(tempNode)
+    o1ToH1 = h1Node["weight_o1"] + o1Node["error"] * h1Node["feedForward"]
+    o1ToH2 = h2Node["weight_o1"] + o1Node["error"] * h2Node["feedForward"]
+
+    # calc weight and Bias Adjustment of o2
+    tempNode = o2Node["value"] + o2Node["error"]
+    print(tempNode)
+    o2ToH1 = h1Node["weight_o1"] + o2Node["error"] * h1Node["feedForward"]
+    o2ToH2 = h2Node["weight_o1"] + o2Node["error"] * h2Node["feedForward"]
+
+    # calc weight and Bias Adjustment of h1
+    tempNode = h1Node["value"] + h1Node["error"]
+    print(tempNode)
+    h1ToI1 = i1Node["weight_h1"] + h1Node["error"] * 1
+    h1ToI2 = i2Node["weight_h1"] + h1Node["error"] * 1
+    # calc weight and Bias Adjustment of h2
+    tempNode = h2Node["value"] + h2Node["error"]
+    print(tempNode)
+    h2ToI1 = i1Node["weight_h2"] + h2Node["error"] * 1
+    h2ToI2 = i2Node["weight_h2"] + h2Node["error"] * 1
 
 
 feedForward()
