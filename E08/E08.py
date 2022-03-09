@@ -56,23 +56,23 @@ def feedForward():
     o2Node["feedForward"] = 1 / (1+exp(temp * -1))
 
 
-def calcErr():
+def calcErr(learningRate=1):
     # Calc err of o1
     temp = o1Node["feedForward"] * \
         (1-o1Node["feedForward"])*(o1Node["true"]-o1Node["feedForward"])
-    o1Node["error"] = temp
+    o1Node["error"] = learningRate * temp
     # Calc err of o2
     temp = o2Node["feedForward"] * \
         (1-o2Node["feedForward"])*(o2Node["true"]-o2Node["feedForward"])
-    o2Node["error"] = temp
+    o2Node["error"] = learningRate * temp
     # Calc err of h1
     temp = h1Node["feedForward"] * (1 - h1Node["feedForward"]) * (
         (o1Node["error"] * h1Node["weight_o1"]) + (o2Node["error"] * h1Node["weight_o2"]))
-    h1Node["error"] = temp
+    h1Node["error"] = learningRate * temp
     # Calc err of h2
     temp = h2Node["feedForward"] * (1 - h2Node["feedForward"]) * (
         (o1Node["error"] * h2Node["weight_o1"]) + (o2Node["error"] * h2Node["weight_o2"]))
-    h2Node["error"] = temp
+    h2Node["error"] = learningRate * temp
 
 
 def backPropagation():
@@ -104,26 +104,56 @@ def backPropagation():
         h2Node["error"] * i2Node["value"]
 
 
-def train(trainingData):
-    for trainingSet in trainingData:
-        print("Training on", trainingSet)
+def train(trainingData, times, learningRate=1):
+    print("Starting training...\n")
+    for epoch in range(times):
+        for trainingSet in trainingData:
+            # Setup nodes
+            i1Node["value"] = trainingSet[0]
+            i2Node["value"] = trainingSet[1]
+            o1Node["true"] = trainingSet[2]
+            o2Node["true"] = trainingSet[3]
 
-        # Setup nodes
-        i1Node["value"] = trainingSet[0]
-        i2Node["value"] = trainingSet[1]
-        o1Node["true"] = trainingSet[2]
-        o2Node["true"] = trainingSet[3]
-
-        # Run full back-propagation
-        for i in range(100):
+            # Run full back-propagation
             feedForward()
-            calcErr()
+            calcErr(learningRate=learningRate)
             backPropagation()
+        print(epoch + 1, "epochs completed", end="\r")
 
-        # Determine result
-        print(o1Node)
-        print(o2Node)
-        print("")
+    print("\nTraining finished ✅")
+
+
+def test(testingData):
+    print("\nStarting testing...\n")
+    for testingSet in testingData:
+        # Setup nodes
+        i1Node["value"] = testingSet[0]
+        i2Node["value"] = testingSet[1]
+        o1Node["true"] = testingSet[2]
+        o2Node["true"] = testingSet[3]
+
+        # Calc values
+        feedForward()
+
+        # Validate
+        print("Set:", testingSet)
+        output1Estimate = round(o1Node["feedForward"])
+        output2Estimate = round(o2Node["feedForward"])
+        output1True = o1Node["true"]
+        output2True = o2Node["true"]
+        print("Estimated output 1:", output1Estimate)
+        print("True value output 1:", output1True)
+        if (output1Estimate == output1True):
+            print("Success ✅")
+        else:
+            print("Fail ❌")
+        print("Estimated output 2:", output2Estimate)
+        print("True value output 2:", output2True)
+        if (output2Estimate == output2True):
+            print("Success ✅")
+        else:
+            print("Fail ❌")
+        print()
 
 
 # Training data
@@ -134,4 +164,5 @@ trainingData = [
     [0, 0, 0, 1],
     [0, 1, 1, 0]
 ]
-train(trainingData)
+train(trainingData, times=1000, learningRate=1)
+test(trainingData)
