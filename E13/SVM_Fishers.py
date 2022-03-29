@@ -4,24 +4,56 @@ from sklearn.datasets import load_iris
 from sklearn import svm
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import cross_val_score
+from statistics import mean
+
 
 iris = load_iris()
 X = iris.data[:, :4]
 y = iris.target
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-svm_model = svm.SVC(kernel='rbf', C=100, gamma='auto', probability=True)
+cList = [1, .1, .001, 100]
+kernalList = ["linear", "rbf", "poly"]
+degreeList = [2, 3, 4]
 
-svm_model.fit(X_train, y_train)
-predictions = svm_model.predict(X_train)
-print(accuracy_score(predictions, y_train))
-predictions = svm_model.predict(X_test)
-print(accuracy_score(predictions, y_test))
 
-#scores = cross_val_score(svm_model, iris.data, iris.target, cv=15)
-#print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+def svmFunction(cParam, kernalParam, degreeParam=3):
+    trainingAccuracyList = []
+    testingAccuracyList = []
 
-###LOOP THROUGH THESE
-#kernal = rbf, linear, and poly (2,3,4 degrees)
-#get averages of apperient and true error rate
+    for i in range(30):
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2)
+        svm_model = svm.SVC(kernel=kernalParam, degree=degreeParam,
+                            C=cParam, gamma='auto', probability=True)
+        svm_model.fit(X_train, y_train)
 
+        predictions = svm_model.predict(X_train)
+        # print("Training =", accuracy_score(predictions, y_train))
+        trainingAccuracyList.append(accuracy_score(predictions, y_train))
+
+        predictions = svm_model.predict(X_test)
+        # print("Testing  =", accuracy_score(predictions, y_test))
+        testingAccuracyList.append(accuracy_score(predictions, y_test))
+
+    trainingAccuracyMean = mean(trainingAccuracyList)
+    testingAccuracyMean = mean(testingAccuracyList)
+    return trainingAccuracyMean, testingAccuracyMean
+
+
+for c in cList:
+    for kernal in kernalList:
+        if kernal == "poly":
+            for degree in degreeList:
+                means = svmFunction(c, kernal, degree)
+                print("C =", c, "Kernal =", kernal, "Degree =", degree)
+                print("Training", means[0], ", Testing", means[1])
+        else:
+            means = svmFunction(c, kernal)
+            print("C =", c, "Kernal =", kernal)
+            print("Training", means[0], ", Testing", means[1])
+# scores = cross_val_score(svm_model, iris.data, iris.target, cv=15)
+# print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+
+# LOOP THROUGH THESE
+# kernal = rbf, linear, and poly (2,3,4 degrees)
+# get averages of apperient and true error rate
