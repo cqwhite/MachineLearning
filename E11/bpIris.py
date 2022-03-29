@@ -1,3 +1,5 @@
+#Connor White & David Chalifoux
+
 import torch
 import pandas as pd
 import torch.nn as nn
