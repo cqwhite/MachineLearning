@@ -84,27 +84,19 @@ def backPropagation():
     # Calc weight and bias adjustment of o2
     o2Node["value"] = o2Node["value"] + o2Node["error"]
     # Calc weight and bias adjustment of h1
-    h1Node["weight_o1"] = h1Node["weight_o1"] + \
-        o1Node["error"] * h1Node["feedForward"]
-    h1Node["weight_o2"] = h1Node["weight_o2"] + \
-        o2Node["error"] * h1Node["feedForward"]
+    h1Node["weight_o1"] = h1Node["weight_o1"] + o1Node["error"] * h1Node["feedForward"]
+    h1Node["weight_o2"] = h1Node["weight_o2"] + o2Node["error"] * h1Node["feedForward"]
     h1Node["value"] = h1Node["value"] + h1Node["error"]
     # Calc weight and bias adjustment of h2
-    h2Node["weight_o1"] = h2Node["weight_o1"] + \
-        o1Node["error"] * h2Node["feedForward"]
-    h2Node["weight_o2"] = h2Node["weight_o2"] + \
-        o2Node["error"] * h2Node["feedForward"]
+    h2Node["weight_o1"] = h2Node["weight_o1"] + o1Node["error"] * h2Node["feedForward"]
+    h2Node["weight_o2"] = h2Node["weight_o2"] + o2Node["error"] * h2Node["feedForward"]
     h2Node["value"] = h2Node["value"] + h2Node["error"]
     # Calc weight and bias adjustment of i1
-    i1Node["weight_h1"] = i1Node["weight_h1"] + \
-        h1Node["error"] * i1Node["value"]
-    i1Node["weight_h2"] = i1Node["weight_h2"] + \
-        h2Node["error"] * i1Node["value"]
+    i1Node["weight_h1"] = i1Node["weight_h1"] + h1Node["error"] * i1Node["value"]
+    i1Node["weight_h2"] = i1Node["weight_h2"] + h2Node["error"] * i1Node["value"]
     # Calc weight and bias adjustment of i2
-    i2Node["weight_h1"] = i2Node["weight_h1"] + \
-        h1Node["error"] * i2Node["value"]
-    i2Node["weight_h2"] = i2Node["weight_h2"] + \
-        h2Node["error"] * i2Node["value"]
+    i2Node["weight_h1"] = i2Node["weight_h1"] + h1Node["error"] * i2Node["value"]
+    i2Node["weight_h2"] = i2Node["weight_h2"] + h2Node["error"] * i2Node["value"]
 
 
 def train(trainingData, times, learningRate=1):
@@ -116,11 +108,25 @@ def train(trainingData, times, learningRate=1):
             i2Node["value"] = trainingSet[1]
             o1Node["true"] = trainingSet[2]
             o2Node["true"] = trainingSet[3]
-            print()
-        # Run full back-propagation
-        feedForward()
-        calcErr(learningRate=learningRate)
-        backPropagation()
+
+            # Run full back-propagation
+            feedForward()
+
+            calcErr(learningRate=learningRate)
+            backPropagation()
+
+            # print()
+            # print()
+            # print("O1:", o1Node)
+            # print("O2:", o2Node)
+            # print()
+            # print("H1:", h1Node)
+            # print("H2:", h2Node)
+            # print()
+            # print("I1:", i1Node)
+            # print("I2:", i2Node)
+            # input()
+            # print()
         print(epoch + 1, "epochs completed", end="\r")
 
     print("\nTraining finished ✅")
@@ -166,7 +172,6 @@ def test(testingData):
             print("Success ✅")
         else:
             print("Fail ❌")
-        print()
 
 
 # Training data
@@ -177,5 +182,5 @@ trainingData = [
     [0, 1, 1, 0],
     [0, 0, 0, 1],
 ]
-train(trainingData, times=10000, learningRate=2)
+train(trainingData, times=1000, learningRate=1)
 test(trainingData)
