@@ -2,7 +2,9 @@ import os
 import pandas as pd
 import re
 
-# df = pd.read_csv (r'Path where the CSV file is stored\File name.csv')
+# Loop over files in directory
+# Import with Pandas and keep in dictionary
+
 dataframes = {}
 for file in os.listdir("./ml_data"):
     norad_id = re.findall("\d+", file)[0]
