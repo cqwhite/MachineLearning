@@ -1,3 +1,5 @@
+# Connor White & David Chalifloux
+
 # From https://datascience.stackexchange.com/questions/26640/how-to-check-for-overfitting-with-svm-and-iris-data
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_iris
@@ -14,6 +16,8 @@ y = iris.target
 cList = [1, .1, .001, 100]
 kernalList = ["linear", "rbf", "poly"]
 degreeList = [2, 3, 4]
+
+bestSVM = [0, "", "", ""]
 
 
 def svmFunction(cParam, kernalParam, degreeParam=3):
@@ -47,13 +51,30 @@ for c in cList:
                 means = svmFunction(c, kernal, degree)
                 print("C =", c, "Kernal =", kernal, "Degree =", degree)
                 print("Training", means[0], ", Testing", means[1])
+
+                accuracyAverage = (means[0] + means[1])/2
+                if (accuracyAverage > bestSVM[0]):
+                    bestSVM[0] = accuracyAverage
+                    bestSVM[1] = c
+                    bestSVM[2] = kernal
+                    bestSVM[3] = degree
+
         else:
             means = svmFunction(c, kernal)
             print("C =", c, "Kernal =", kernal)
             print("Training", means[0], ", Testing", means[1])
+
+            accuracyAverage = (means[0] + means[1])/2
+            if (accuracyAverage > bestSVM[0]):
+                bestSVM[0] = accuracyAverage
+                bestSVM[1] = c
+                bestSVM[2] = kernal
+                bestSVM[3] = ""
+
+#THEN FIND THE BEST ONE##########
+print("Best SVM", bestSVM)
+
+
 # scores = cross_val_score(svm_model, iris.data, iris.target, cv=15)
 # print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
-# LOOP THROUGH THESE
-# kernal = rbf, linear, and poly (2,3,4 degrees)
-# get averages of apperient and true error rate
