@@ -1,14 +1,11 @@
 import os
 import pandas as pd
 import re
-import dateutil.parser
-
-doa_df = {}
-maneuvers_df = {}
 
 # Loop over files in directory
 # Import with Pandas and keep in dictionary
 # Processes all files in ./ml_data
+# Note: No longer being used
 def read_ml_data():
     doa_df = {}
     maneuvers_df = {}
@@ -22,6 +19,7 @@ def read_ml_data():
 
 
 def match_truth(doa_file, truth_file):
+    # Read doa and truth files
     doa_df = pd.read_csv(doa_file, parse_dates=["primary_rx_time"]).assign(
         maneuver=False
     )
@@ -29,23 +27,16 @@ def match_truth(doa_file, truth_file):
 
     # Loop over truth data and match with maneuver data
     for row in truth_df.itertuples():
-        print(row[4])
-    mask = (doa_df["primary_rx_time"] >= "2021-09-12T04:18:54.000Z") & (
-        doa_df["primary_rx_time"] <= "2021-09-12T05:57:02.000Z"
-    )
+        mask = (doa_df["primary_rx_time"] >= row[4]) & (
+            doa_df["primary_rx_time"] <= row[5]
+        )
 
-    doa_df.loc[mask, "maneuver"] = True
-    # doa_in_range = doa_df[
-    #     doa_df["primary_rx_time"] > dateutil.parser.isoparse("2021-09-12T04:18:54.000Z")
-    # ]
-    # doa_in_range = doa_df[
-    #     doa_df["primary_rx_time"] < dateutil.parser.isoparse("2021-09-12T05:57:02.000Z")
-    # ]
-    print(doa_df[doa_df["maneuver"] == True])
+        doa_df.loc[mask, "maneuver"] = True
+
+    # Return dataframe with combined maneuver data
+    return doa_df
 
 
-# for key, value in maneuvers_df.items():
-#     print(key)
-# print(maneuvers_df)
-
-match_truth("./ml_data/42709_doa.csv", "42709_maneuvers_truthv2.csv")
+match_df = match_truth("./ml_data/42709_doa.csv", "42709_maneuvers_truthv2.csv")
+match_df.head(100).to_csv("./output.txt")
+print(match_df[match_df["maneuver"] == True])
