@@ -21,41 +21,50 @@ def read_ml_data():
             maneuvers_df[norad_id] = pd.read_csv("./ml_data/" + file)
 
 
-def match_truth(doa_file, truth_file):
-    # Read doa and truth files
-    doa_df = pd.read_csv(doa_file, parse_dates=["primary_rx_time"]).assign(
-        maneuver=False
-    )
-    truth_df = pd.read_csv(truth_file)
+def combine_rows(doa_df):
+    unique_rx_times = doa_df.primary_rx_time.unique()
+    print(doa_df[doa_df["primary_rx_time"] == unique_rx_times[0]])
+    print(unique_rx_times[0])
 
+
+def match_truth(doa_df, truth_df):
     # Loop over truth data and match with maneuver data
     for row in truth_df.itertuples():
         mask = (doa_df["primary_rx_time"] >= row[4]) & (
             doa_df["primary_rx_time"] <= row[5]
         )
 
-        doa_df.loc[mask, "maneuver"] = True
+        doa_df.loc[mask, "maneuver"] = 1
 
     # Return dataframe with combined maneuver data
     return doa_df
 
 
-# Add the truth data to the DOA data
-match_df = match_truth("./ml_data/42709_doa.csv", "42709_maneuvers_truthv2.csv")
-
-# Standardize features by removing the mean and scaling to unit variance.
-scaler = StandardScaler()
-match_df[["tdoa_scaled", "fdoa_scaled"]] = scaler.fit_transform(
-    match_df[["tdoa", "fdoa"]]
+# Read doa and truth files
+doa_df = pd.read_csv("./ml_data/42709_doa.csv", parse_dates=["primary_rx_time"]).assign(
+    maneuver=0
 )
-print(match_df)
+truth_df = pd.read_csv("42709_maneuvers_truthv2.csv")
 
-# Split - 60% train, 20% test, 20% validate
-train, test, validate = np.split(
-    match_df.sample(frac=1, random_state=9),
-    [int(0.6 * len(match_df)), int(0.8 * len(match_df))],
-)
+# Combine rows
+combine_rows(doa_df)
 
-# Save to CSV
-train.head(100).to_csv("./output.txt")
-print("Example data output to ./output.txt")
+# # Add the truth data to the DOA data
+# match_df = match_truth(doa_df, truth_df)
+
+# # Standardize features by removing the mean and scaling to unit variance.
+# scaler = StandardScaler()
+# match_df[["tdoa_scaled", "fdoa_scaled"]] = scaler.fit_transform(
+#     match_df[["tdoa", "fdoa"]]
+# )
+# print(match_df)
+
+# # Split - 60% train, 20% test, 20% validate
+# train, test, validate = np.split(
+#     match_df.sample(frac=1, random_state=9),
+#     [int(0.6 * len(match_df)), int(0.8 * len(match_df))],
+# )
+
+# # Save to CSV
+# train.head(100).to_csv("./output.txt")
+# print("Example data output to ./output.txt")
