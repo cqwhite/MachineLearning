@@ -1,6 +1,9 @@
+# David Chalifoux, Connor White, Quinn Partain, Micah Odell
 import os
 import pandas as pd
 import re
+from sklearn.preprocessing import StandardScaler
+import numpy as np
 
 # Loop over files in directory
 # Import with Pandas and keep in dictionary
@@ -37,6 +40,22 @@ def match_truth(doa_file, truth_file):
     return doa_df
 
 
+# Add the truth data to the DOA data
 match_df = match_truth("./ml_data/42709_doa.csv", "42709_maneuvers_truthv2.csv")
-match_df.head(100).to_csv("./output.txt")
-print(match_df[match_df["maneuver"] == True])
+
+# Standardize features by removing the mean and scaling to unit variance.
+scaler = StandardScaler()
+match_df[["tdoa_scaled", "fdoa_scaled"]] = scaler.fit_transform(
+    match_df[["tdoa", "fdoa"]]
+)
+print(match_df)
+
+# Split - 60% train, 20% test, 20% validate
+train, test, validate = np.split(
+    match_df.sample(frac=1, random_state=9),
+    [int(0.6 * len(match_df)), int(0.8 * len(match_df))],
+)
+
+# Save to CSV
+train.head(100).to_csv("./output.txt")
+print("Example data output to ./output.txt")
