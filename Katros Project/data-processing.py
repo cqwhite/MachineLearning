@@ -4,6 +4,7 @@ import pandas as pd
 import re
 from sklearn.preprocessing import StandardScaler
 import numpy as np
+pd.options.mode.chained_assignment = None  # default='warn'
 
 # Loop over files in directory
 # Import with Pandas and keep in dictionary
@@ -23,8 +24,32 @@ def read_ml_data():
 
 def combine_rows(doa_df):
     unique_rx_times = doa_df.primary_rx_time.unique()
-    print(doa_df[doa_df["primary_rx_time"] == unique_rx_times[0]])
-    print(unique_rx_times[0])
+    # print(doa_df[doa_df["primary_rx_time"] == unique_rx_times[0]])
+    # print(unique_rx_times[0])
+    # print(doa_df)
+    count = 0
+    new_df = pd.DataFrame(columns=['sat_id','sat_name','norad_id','primary_rx_time','primary_ant_id','secondary_ant_id','tdoa','fdoa','maneuver','175_177_tdoa','175_177_fdoa','175_176_tdoa','175_176_fdoa','176_177_tdoa','176_177_fdoa'])
+    for times in unique_rx_times:
+        temp = doa_df[doa_df["primary_rx_time"] == times]
+
+        for x in range(len(temp)):
+            firstAnt = temp.iloc[x]['primary_ant_id']
+            secondAnt = temp.iloc[x]['secondary_ant_id']
+            name = str(firstAnt)+"_"+str(secondAnt)+"_tdoa"
+            temp[name] = temp.iloc[x]['tdoa']
+            name = str(firstAnt)+"_"+str(secondAnt)+"_fdoa"
+            temp[name] = temp.iloc[x]['fdoa']
+            new_df.loc[len(new_df.index)] = temp.iloc[x]
+
+        count += 1
+        if count % 100 == 0:
+            print("running....", count)
+
+    print(new_df)
+
+  
+
+
 
 
 def match_truth(doa_df, truth_df):
