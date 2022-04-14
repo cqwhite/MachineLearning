@@ -7,8 +7,6 @@ import re
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 
-pd.options.mode.chained_assignment = None  # default='warn'
-
 # Loop over files in directory
 # Import with Pandas and keep in dictionary
 # Processes all files in ./ml_data
