@@ -1,9 +1,12 @@
 # David Chalifoux, Connor White, Quinn Partain, Micah Odell
+from email.utils import parsedate_to_datetime
+from math import comb
 import os
 import pandas as pd
 import re
 from sklearn.preprocessing import StandardScaler
 import numpy as np
+
 pd.options.mode.chained_assignment = None  # default='warn'
 
 # Loop over files in directory
@@ -24,32 +27,26 @@ def read_ml_data():
 
 def combine_rows(doa_df):
     unique_rx_times = doa_df.primary_rx_time.unique()
-    # print(doa_df[doa_df["primary_rx_time"] == unique_rx_times[0]])
-    # print(unique_rx_times[0])
-    # print(doa_df)
+
     count = 0
-    new_df = pd.DataFrame(columns=['sat_id','sat_name','norad_id','primary_rx_time','primary_ant_id','secondary_ant_id','tdoa','fdoa','maneuver','175_177_tdoa','175_177_fdoa','175_176_tdoa','175_176_fdoa','176_177_tdoa','176_177_fdoa'])
-    for times in unique_rx_times:
-        temp = doa_df[doa_df["primary_rx_time"] == times]
+    rows = []
+    for time in unique_rx_times:
+        row = {"primary_rx_time": time}
+        matching_rows = doa_df[doa_df["primary_rx_time"] == time]
 
-        for x in range(len(temp)):
-            firstAnt = temp.iloc[x]['primary_ant_id']
-            secondAnt = temp.iloc[x]['secondary_ant_id']
-            name = str(firstAnt)+"_"+str(secondAnt)+"_tdoa"
-            temp[name] = temp.iloc[x]['tdoa']
-            name = str(firstAnt)+"_"+str(secondAnt)+"_fdoa"
-            temp[name] = temp.iloc[x]['fdoa']
-            new_df.loc[len(new_df.index)] = temp.iloc[x]
-
-        count += 1
-        if count % 100 == 0:
-            print("running....", count)
-
-    print(new_df)
-
-  
-
-
+        for x in range(len(matching_rows)):
+            primary_ant = matching_rows.iloc[x]["primary_ant_id"]
+            secondary_ant = matching_rows.iloc[x]["secondary_ant_id"]
+            tdoa_column_name = str(primary_ant) + "_" + str(secondary_ant) + "_tdoa"
+            fdoa_column_name = str(primary_ant) + "_" + str(secondary_ant) + "_fdoa"
+            tdoa_value = matching_rows.iloc[x]["tdoa"]
+            fdoa_value = matching_rows.iloc[x]["tdoa"]
+            row[tdoa_column_name] = tdoa_value
+            row[fdoa_column_name] = fdoa_value
+            print(count, end="\r")
+            count += 1
+        rows.append(row)
+    return pd.DataFrame(rows)
 
 
 def match_truth(doa_df, truth_df):
@@ -66,30 +63,39 @@ def match_truth(doa_df, truth_df):
 
 
 # Read doa and truth files
-doa_df = pd.read_csv("./ml_data/42709_doa.csv", parse_dates=["primary_rx_time"]).assign(
-    maneuver=0
-)
+doa_df = pd.read_csv("./ml_data/42709_doa.csv", parse_dates=["primary_rx_time"])
 truth_df = pd.read_csv("42709_maneuvers_truthv2.csv")
 
 # Combine rows
-combine_rows(doa_df)
+combined_df = combine_rows(doa_df)
 
-# # Add the truth data to the DOA data
-# match_df = match_truth(doa_df, truth_df)
+# Add maneuver column
+combined_df = combined_df.assign(maneuver=0)
 
-# # Standardize features by removing the mean and scaling to unit variance.
-# scaler = StandardScaler()
-# match_df[["tdoa_scaled", "fdoa_scaled"]] = scaler.fit_transform(
-#     match_df[["tdoa", "fdoa"]]
-# )
-# print(match_df)
+# Add the truth data to the DOA data
+match_df = match_truth(combined_df, truth_df)
 
-# # Split - 60% train, 20% test, 20% validate
-# train, test, validate = np.split(
-#     match_df.sample(frac=1, random_state=9),
-#     [int(0.6 * len(match_df)), int(0.8 * len(match_df))],
-# )
+# Standardize features by removing the mean and scaling to unit variance.
+columns_to_scale = [
+    "175_177_tdoa",
+    "175_177_fdoa",
+    "175_176_tdoa",
+    "175_176_fdoa",
+    "176_177_tdoa",
+    "176_177_fdoa",
+]
+columns_to_add = []
+for column in columns_to_scale:
+    columns_to_add.append(column + "_scaled")
+scaler = StandardScaler()
+match_df[columns_to_add] = scaler.fit_transform(match_df[columns_to_scale])
 
-# # Save to CSV
-# train.head(100).to_csv("./output.txt")
-# print("Example data output to ./output.txt")
+# Split - 60% train, 20% test, 20% validate
+train, test, validate = np.split(
+    match_df.sample(frac=1, random_state=9),
+    [int(0.6 * len(match_df)), int(0.8 * len(match_df))],
+)
+
+# Save to CSV
+train.head(100).to_csv("./output.txt")
+print("Example data output to ./output.txt")
