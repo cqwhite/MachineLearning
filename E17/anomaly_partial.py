@@ -1,32 +1,35 @@
 import math
 
+
 def readFile(infile, data):
-    file1 = open(infile,"r")
-    for i in range(6): #skip the header lines
+    file1 = open(infile, "r")
+    for i in range(6):  # skip the header lines
         file1.readline()
     for line in file1:
         lineList = line.split(" ")
         if len(lineList) > 1:
-            vals = [float(lineList[1]),float(lineList[2])]    
+            vals = [float(lineList[1]), float(lineList[2])]
             data.append(vals)
-            
+
+
 def readY(infile, data):
-    file1 = open(infile,"r")
-    for i in range(6): #skip the header lines
+    file1 = open(infile, "r")
+    for i in range(6):  # skip the header lines
         file1.readline()
     for line in file1:
         if line[0] == " ":
             data.append(int(line))
 
+
 def main():
-    #Get training and xval data
+    # Get training and xval data
     xList = []
     xValList = []
     yValList = []
-    readFile("X.txt", xList)
-    readFile("Xval.txt", xValList)
-    readY("yval.txt", yValList)
-    #calc mu's for feature 1 and feature 2
+    readFile("./E17/X.txt", xList)
+    readFile("./E17/Xval.txt", xValList)
+    readY("./E17/yval.txt", yValList)
+    # calc mu's for feature 1 and feature 2
     mu1 = 0
     mu2 = 0
     for elem in xList:
@@ -34,7 +37,7 @@ def main():
         mu2 += elem[1]
     mu1 /= len(xList)
     mu2 /= len(xList)
-    #calc sigmas for feature 1 and feature 2
+    # calc sigmas for feature 1 and feature 2
     sigma1 = 0
     sigma2 = 0
     for elem in xList:
@@ -53,7 +56,7 @@ def main():
         epsilon = epsilon/2
         anomalyList = []
         for x in xValList:
-            #mod this code to calc p1,p2 and p
+            # mod this code to calc p1,p2 and p
             p1 = 0.0
             p2 = 0.0
             p = 0.0
@@ -66,12 +69,13 @@ def main():
         falsePositives = 0
         falseNegatives = 0
         for i in range(len(anomalyList)):
-            #your code here to count TP,FP and FN
+            # your code here to count TP,FP and FN
             pass
         precision = truePositives/(truePositives + falsePositives)
         recall = truePositives/(truePositives + falseNegatives)
         f1 = 2 * (precision * recall)/(precision + recall)
-        print("true positives =",truePositives,"   false positives =",falsePositives,"   false negatives =",falseNegatives)
+        print("true positives =", truePositives, "   false positives =",
+              falsePositives, "   false negatives =", falseNegatives)
         print("f1 = %.10f" % f1)
         print("epsilon = %.10f" % epsilon)
         print("------------------")
@@ -82,5 +86,6 @@ def main():
     print("Final epsilon = %.10f" % prevepsilon)
     print("Num iters = ", numIters)
     print("------------------")
+
 
 main()
