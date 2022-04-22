@@ -26,7 +26,7 @@ print("n=", n_features)
 # define model
 model = Sequential()
 model.add(Dense(6, activation="sigmoid", input_shape=(n_features,)))
-model.add(Dense(6, activation='softmax'))
+model.add(Dense(12, activation='softmax'))
 
 # compile the model
 model.compile(optimizer='adam',
