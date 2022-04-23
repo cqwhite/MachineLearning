@@ -1,0 +1,47 @@
+"""
+Example of using kNN for outlier detection
+"""
+from pyod.models.knn import KNN
+from pyod.utils.data import generate_data
+from pyod.utils.data import evaluate_print
+from pyod.utils.example import visualize
+
+if __name__ == "__main__":
+    # Generate sample data
+    # pylint: disable=unbalanced-tuple-unpacking
+    X_train, X_test, y_train, y_test = generate_data(
+        n_features=2, random_state=42, behaviour="new"
+    )
+    print(y_train)
+
+    # train kNN detector
+    CLF_NAME = "KNN"
+    clf = KNN()
+    clf.fit(X_train)
+
+    # get the prediction labels and outlier scores of the training data
+    y_train_pred = clf.labels_  # binary labels (0: inliers, 1: outliers)
+    y_train_scores = clf.decision_scores_  # raw outlier scores
+
+    # get the prediction on the test data
+    y_test_pred = clf.predict(X_test)  # outlier labels (0 or 1)
+    y_test_scores = clf.decision_function(X_test)  # outlier scores
+
+    # evaluate and print the results
+    print("\nOn Training Data:")
+    evaluate_print(CLF_NAME, y_train, y_train_scores)
+    print("\nOn Test Data:")
+    evaluate_print(CLF_NAME, y_test, y_test_scores)
+
+    # visualize the results
+    visualize(
+        CLF_NAME,
+        X_train,
+        y_train,
+        X_test,
+        y_test,
+        y_train_pred,
+        y_test_pred,
+        show_figure=True,
+        save_figure=True,
+    )
