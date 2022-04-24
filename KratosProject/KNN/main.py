@@ -1,18 +1,39 @@
 """
 Example of using kNN for outlier detection
+
+David Chalifoux, Connor White, Quinn Partain, Micah Odell
 """
 from pyod.models.knn import KNN
-from pyod.utils.data import generate_data
 from pyod.utils.data import evaluate_print
 from pyod.utils.example import visualize
+import pandas as pd
 
 if __name__ == "__main__":
-    # Generate sample data
-    # pylint: disable=unbalanced-tuple-unpacking
-    X_train, X_test, y_train, y_test = generate_data(
-        n_features=2, random_state=42, behaviour="new"
-    )
-    print(y_train)
+    train_df = pd.read_csv("./42709_train.csv").dropna()
+    test_df = pd.read_csv("./42709_test.csv").dropna()
+
+    X_train = train_df[
+        [
+            # "175_177_tdoa",
+            # "175_177_fdoa",
+            # "175_176_tdoa",
+            # "175_176_fdoa",
+            "176_177_tdoa",
+            "176_177_fdoa",
+        ]
+    ]
+    X_test = test_df[
+        [
+            # "175_177_tdoa",
+            # "175_177_fdoa",
+            # "175_176_tdoa",
+            # "175_176_fdoa",
+            "176_177_tdoa",
+            "176_177_fdoa",
+        ]
+    ]
+    y_train = train_df["maneuver"]
+    y_test = test_df["maneuver"]
 
     # train kNN detector
     CLF_NAME = "KNN"
