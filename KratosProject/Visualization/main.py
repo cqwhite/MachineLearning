@@ -11,11 +11,11 @@ train_df = pd.read_csv("./42709_train.csv").dropna()
 fig = px.scatter_matrix(
     train_df,
     dimensions=[
-        "175_177_tdoa",
+        # "175_177_tdoa",
         "175_177_fdoa",
-        "175_176_tdoa",
+        # "175_176_tdoa",
         "175_176_fdoa",
-        "176_177_tdoa",
+        # "176_177_tdoa",
         "176_177_fdoa",
     ],
     color="maneuver",
