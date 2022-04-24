@@ -1,6 +1,16 @@
 """
 Example of using kNN for outlier detection
 
+Tested different combinations of TDOA and FDOA data.
+So far, 176_177_tdoa with 176_177_fdoa seems to be the most performant.
+
+RESULTS:
+    On Training Data:
+    KNN ROC:0.5731, precision @ rank n:0.2151
+
+    On Test Data:
+    KNN ROC:0.5821, precision @ rank n:0.25
+
 David Chalifoux, Connor White, Quinn Partain, Micah Odell
 """
 from pyod.models.knn import KNN
