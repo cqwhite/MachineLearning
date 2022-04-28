@@ -77,7 +77,7 @@ def main(popSize, chromoSize, geneBoundaries, mutRate, crossRate, maxGens, conve
             nextGeneration.append(o2)
             pop = nextGeneration[:]
 
-    pass
+    return "BestChromo=", mostFitChromo
     # generate population with random chromosome values
     # calculate fitnesses
     # tournament selection for reproduction
