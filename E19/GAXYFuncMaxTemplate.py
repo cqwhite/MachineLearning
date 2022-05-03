@@ -1,3 +1,11 @@
+"""
+GAXYFuncMax
+
+David Chalifoux, Connor White
+
+No speical paramters or files needed to be ran
+"""
+
 import random
 import matplotlib.pyplot as plt
 import time
@@ -85,4 +93,4 @@ def main(popSize, chromoSize, geneBoundaries, mutRate, crossRate, maxGens, conve
 
 
 main(popSize=500, chromoSize=32, geneBoundaries=[
-     16], mutRate=.01, crossRate=.6, maxGens=1000, convergePct=1.0)
+     16], mutRate=.01, crossRate=.6, maxGens=2000, convergePct=1.0)
