@@ -6,14 +6,6 @@ Connor White & David Chalifloux
 import random
 import sys
 
-dataMatrix = [
-    [0, 241, 162, 351, 183],
-    [241, 0, 202, 186, 97],
-    [162, 202, 0, 216, 106],
-    [351, 186, 216, 0, 186],
-    [183, 97, 106, 187, 0],
-]
-
 
 def genPop(numIndividuals, dataMatrix):
     indexMatrix = []
@@ -57,43 +49,59 @@ def mutation(child, mutRate=0.01):
     return child
 
 
-def nextGeneration(population, fitnessList, mutRate):
+def nextGeneration(population, fitnessList, mutRate, crossRate, dataMatrix):
     nextPopulation = []
     while len(nextPopulation) < len(population):
         # Select two mates using tournament
         mate1 = naryTournament(population, fitnessList)
         mate2 = naryTournament(population, fitnessList)
 
-        # Randomly select segment from mate1
-        segmentStart = random.randrange(0, len(mate1))
-        segmentLength = 1
-        remainingLength = len(mate1[segmentStart:])
-        if remainingLength > 1:
-            segmentLength = random.randrange(1, len(mate1[segmentStart:]))
-        else:
+        # Crossover based on crossRate
+        if random.random() <= crossRate:
+            # Randomly select segment from mate1
+            segmentStart = random.randrange(0, len(mate1))
             segmentLength = 1
-        segment = mate1[segmentStart : segmentStart + segmentLength]
+            remainingLength = len(mate1[segmentStart:])
+            if remainingLength > 1:
+                segmentLength = random.randrange(1, len(mate1[segmentStart:]))
+            else:
+                segmentLength = 1
+            segment = mate1[segmentStart : segmentStart + segmentLength]
 
-        # Create child
-        child = [None] * len(mate1)
-        child[segmentStart : segmentStart + segmentLength] = segment
-        nextIndex = segmentStart + segmentLength
-        while None in child:
-            if nextIndex > len(child) - 1:
-                nextIndex = 0
-
-            while mate2[nextIndex] in child:
-                nextIndex += 1
+            # Create child
+            child = [None] * len(mate1)
+            child[segmentStart : segmentStart + segmentLength] = segment
+            nextIndex = segmentStart + segmentLength
+            while None in child:
                 if nextIndex > len(child) - 1:
                     nextIndex = 0
-            child[nextIndex] = mate2[nextIndex]
-            nextIndex += 1
-        child = mutation(child, mutRate)
-        nextPopulation.append(child)
+
+                while mate2[nextIndex] in child:
+                    nextIndex += 1
+                    if nextIndex > len(child) - 1:
+                        nextIndex = 0
+                child[nextIndex] = mate2[nextIndex]
+                nextIndex += 1
+            child = mutation(child, mutRate)
+            nextPopulation.append(child)
+        else:
+            # Perserve best fit mate
+            if fitness(mate1, dataMatrix) < fitness(mate2, dataMatrix):
+                nextPopulation.append(mate1)
+            else:
+                nextPopulation.append(mate2)
     return nextPopulation
 
 
 def main(popSize, mutRate, crossRate, maxGens):
+    dataMatrix = [
+        [0, 241, 162, 351, 183],
+        [241, 0, 202, 186, 97],
+        [162, 202, 0, 216, 106],
+        [351, 186, 216, 0, 186],
+        [183, 97, 106, 187, 0],
+    ]
+
     population = genPop(popSize, dataMatrix)
     minFitLists = []
     for i in range(maxGens):
@@ -114,7 +122,9 @@ def main(popSize, mutRate, crossRate, maxGens):
             "bestChromo:",
             mostFitChromo,
         )
-        population = nextGeneration(population, fitnessList, mutRate)
+        population = nextGeneration(
+            population, fitnessList, mutRate, crossRate, dataMatrix
+        )
 
 
 main(popSize=10, mutRate=0.01, crossRate=0.6, maxGens=100)
