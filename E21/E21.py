@@ -1,5 +1,22 @@
 """
-Connor White & David Chalifloux
+Connor White & David Chalifoux
+
+What preparations are needed to make the data useable?
+Thanks to our implementation, nothing.
+
+What decisions will need to be made regarding the GA configuration? In other words, what are the parameters that will affect overall GA performance?
+Population size, mutation rate, crossover rate, and max generations will be most useful to us.
+Because the length of each chromosome is quite long (30), my intuition tells me that a larger population size will be beneficial.
+
+What configuration provided the best performance as a % of optimal tour?
+popSize=50000, mutRate=0.1, crossRate=0.4, maxGens=115
+Most reliably trended toward at least 95% fitness.
+
+What appears to be your best tour?
+My best run had a fitness percentage of 99.9%.
+
+What is the number of possible tours that would have to be tested to find the brute force solution?
+8.841762e+30 (29 factorial)
 
 """
 
