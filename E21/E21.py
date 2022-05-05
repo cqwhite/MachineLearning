@@ -1,5 +1,5 @@
 """
-Connor White & David Chalifoux
+Connor White & David Chalifloux
 
 What preparations are needed to make the data useable?
 Thanks to our implementation, nothing.
