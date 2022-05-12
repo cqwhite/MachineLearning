@@ -47,8 +47,20 @@ if __name__ == "__main__":
 
     # train kNN detector
     CLF_NAME = "KNN"
-    clf = KNN()
+    CONTAMINATION = len(train_df.query("maneuver == 1")) / len(train_df)
+    clf = KNN(
+        contamination=CONTAMINATION,
+        algorithm="ball_tree",
+        n_neighbors=12,
+        method="largest",
+    )
     clf.fit(X_train)
+
+    # print parameters
+    print("Algorithm:", clf.algorithm)
+    print("Contamination:", clf.contamination)
+    print("N-Neigbors:", clf.n_neighbors)
+    print("Method:", clf.method)
 
     # get the prediction labels and outlier scores of the training data
     y_train_pred = clf.labels_  # binary labels (0: inliers, 1: outliers)
@@ -65,14 +77,14 @@ if __name__ == "__main__":
     evaluate_print(CLF_NAME, y_test, y_test_scores)
 
     # visualize the results
-    visualize(
-        CLF_NAME,
-        X_train,
-        y_train,
-        X_test,
-        y_test,
-        y_train_pred,
-        y_test_pred,
-        show_figure=True,
-        save_figure=True,
-    )
+    # visualize(
+    #     CLF_NAME,
+    #     X_train,
+    #     y_train,
+    #     X_test,
+    #     y_test,
+    #     y_train_pred,
+    #     y_test_pred,
+    #     show_figure=True,
+    #     save_figure=True,
+    # )
