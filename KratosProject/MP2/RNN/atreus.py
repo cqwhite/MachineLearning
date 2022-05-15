@@ -1,11 +1,3 @@
-# TO FINISH THE PROJECT
-# TEST WITH LINE 7 OUT
-# DO paramater tests of different hidden units and different time steps
-# make a count and print it
-# try the psa file
-
-# confusion matrix??
-
 import matplotlib.pyplot as plt
 import math
 from sklearn.metrics import mean_squared_error
@@ -87,7 +79,7 @@ def plot_result(trainY, testY, train_predict, test_predict):
 
 
 def rnn(timeStep, timeStepUnit, hiddenUnit, denseUnit):
-    trainFile = "./KratosProject/MP2/sat42709.txt"
+    trainFile = "./RNN/sat42709.txt"
     sunspots_url = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/monthly-sunspots.csv'
     time_steps = timeStep
     train_data, test_data, data = get_train_test(trainFile)
