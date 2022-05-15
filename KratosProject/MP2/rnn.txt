@@ -4,7 +4,6 @@
 # make a count and print it
 # try the psa file
 
-# confusion matrix??
 
 import matplotlib.pyplot as plt
 import math
@@ -80,9 +79,9 @@ def plot_result(trainY, testY, train_predict, test_predict):
     #plt.axvline(x=len(trainY), color='r')
     plt.legend(['Actual', 'Predictions'])
     plt.xlabel('Observation number after given time steps')
-    plt.ylabel('Anomaly Detection Scale')
+    plt.ylabel('Sunspots scaled')
     plt.title(
-        'Actual and Predicted Values')
+        'Actual and Predicted Values. The Red Line Separates The Training And Test Examples')
     plt.show()
 
 
@@ -98,7 +97,7 @@ def rnn(timeStep, timeStepUnit, hiddenUnit, denseUnit):
     model = create_RNN(hidden_units=hiddenUnit, dense_units=denseUnit, input_shape=(time_steps, timeStepUnit),
                        activation=['tanh', 'tanh'])
 
-    model.fit(trainX, trainY, epochs=5, batch_size=1, verbose=2)
+    model.fit(trainX, trainY, epochs=10, batch_size=1, verbose=2)
 
     # make predictions
     train_predict = model.predict(trainX)
@@ -114,7 +113,7 @@ def rnn(timeStep, timeStepUnit, hiddenUnit, denseUnit):
 
 
 # Best Run
-rnn(12, 1, 12, 1)
+rnn(12, 1, 24, 1)
 # best run 12, 1, 12, 1
 
 
