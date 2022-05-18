@@ -13,7 +13,6 @@ from pandas import read_csv
 def get_train_test(textFile, split_percent=0.8):
     df = read_csv(textFile, usecols=[1, 2, 3, 4, 5, 6, 7], engine='python')
     data = np.array(df.values.astype('float32'))
-    #print("DAAAATTTAAAA", data[0])
     scaler = MinMaxScaler(feature_range=(0, 1))
     data = scaler.fit_transform(data).flatten()
 
